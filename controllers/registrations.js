@@ -53,6 +53,11 @@ exports.createRegistration = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Company not found' });
     }
 
+    const registrationCount = await Registration.countDocuments({ user: req.user.id });
+    if (registrationCount >= 3) {
+      return res.status(400).json({ success: false, message: 'User can not register more than 3 companies' });
+    }
+
     const existing = await Registration.findOne({ user: req.user.id, company: companyId });
     if (existing) {
       return res.status(400).json({ success: false, message: 'User already registered with this company' });
@@ -65,7 +70,6 @@ exports.createRegistration = async (req, res) => {
     res.status(400).json({ success: false, message: err.message });
   }
 };
-
 // @desc    Update registration
 // @route   PUT /api/v1/registrations/:id
 // @access  Private
