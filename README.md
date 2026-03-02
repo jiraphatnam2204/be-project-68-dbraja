@@ -75,7 +75,7 @@ The API will be accessible at `http://localhost:5000`.
 -   `/api/v1/auth`: Authentication routes (Register, Login, Logout, Me)
 -   `/api/v1/companies`: Company management routes
 -   `/api/v1/registrations`: Registration management routes
--   `/api/v1/docs`: Swagger API Documentation
+-   `/api-docs`: Swagger API Documentation
 
 ---
 Developed as part of the Software Development Practice course.
