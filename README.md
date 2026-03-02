@@ -24,7 +24,7 @@ The **Online Job Fair Registration API** is a robust backend system built with N
 ## 📖 Documentation & Use Case Diagram
 
 For a detailed breakdown of system actors and the use case diagram (PlantUML), please refer to the:
-👉 **[Intro Presentation & Use Case Diagram](IntroPresentation.md)**
+👉 **[Intro Presentation & Use Case Diagram](docs/IntroPresentation.md)**
 
 ## 📦 Installation
 
