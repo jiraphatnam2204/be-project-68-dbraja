@@ -59,6 +59,14 @@ app.use(hpp());
 //Enable CORS
 app.use(cors());
 
+//Mount routers
+app.use('/api/v1/companies', companies);
+app.use('/api/v1/auth', auth);
+app.use('/api/v1/registrations', registrations);
+
+const PORT = process.env.PORT || 5000;
+const server = app.listen(PORT, console.log('Server running in', process.env.NODE_ENV, 'mode on port', PORT));
+
 const swaggerOptions = {
     swaggerDefinition: {
         openapi: '3.0.0',
@@ -69,7 +77,7 @@ const swaggerOptions = {
         },
         servers: [
             {
-                url: 'http://localhost:5000/api/v1',
+                url : process.env.HOST + ":" + PORT + "/api/v1"
             }
         ]
     },
@@ -78,15 +86,6 @@ const swaggerOptions = {
 
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
-
-//Mount routers
-app.use('/api/v1/companies', companies);
-app.use('/api/v1/auth', auth);
-app.use('/api/v1/registrations', registrations);
-
-const PORT = process.env.PORT || 5000;
-const server = app.listen(PORT, console.log('Server running in', process.env.NODE_ENV, 'mode on port', PORT));
 
 //Handle unhandled promise rejections
 process.on('unhandledRejection', (err, promise) => {
