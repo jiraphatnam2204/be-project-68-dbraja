@@ -15,8 +15,6 @@ const cors = require('cors');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
-const path = require('path');
-
 //Load env vars
 dotenv.config({ path: './config/config.env' });
 
@@ -83,20 +81,11 @@ const swaggerOptions = {
             }
         ]
     },
-    apis: [path.join(__dirname, './routes/*.js')]
+    apis: ['./routes/*.js']
 };
-    
-const CSS_URL = "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css";
-const JS_URLS = [
-  "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.js",
-  "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.js"
-];
+
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs, {
-    customCssUrl: CSS_URL,
-    customJs: JS_URLS,
-    customSiteTitle: "Online Job Fair API Docs"
-}));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 //Handle unhandled promise rejections
 process.on('unhandledRejection', (err, promise) => {
