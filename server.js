@@ -43,7 +43,16 @@ app.use(cookieParser());
 app.use(mongoSanitize());
 
 //Helmet
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com"],
+      styleSrc: ["'self'", "'unsafe-inline'", "cdnjs.cloudflare.com", "fonts.googleapis.com"],
+      imgSrc: ["'self'", "data:", "validator.swagger.io"],
+    },
+  },
+}));
 
 //Prevent XSS attacks
 app.use(xss());
