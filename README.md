@@ -15,6 +15,7 @@ A robust backend system built with Node.js, Express, and MongoDB for managing jo
   - Appointment dates are restricted to the job fair period (e.g., May 10-13, 2022).
   - Users can manage their own registrations (View, Update, Delete).
   - Admins can view and manage all registrations across the platform.
+  - Admins can view overall registration statistics including total counts and per-company breakdown.
 - **Advanced Security**:
   - **Data Sanitization**: Against NoSQL injection and XSS attacks.
   - **Security Headers**: Implemented via Helmet.
@@ -101,6 +102,7 @@ The server will start at `http://localhost:5000` by default.
 
 ### Registrations Endpoints
 - `GET /api/v1/registrations` - Get all registrations (User: own, Admin: all)
+- `GET /api/v1/registrations/stats` - Get overall registration statistics (Admin Only)
 - `GET /api/v1/registrations/:id` - Get a specific registration
 - `POST /api/v1/companies/:companyId/registrations` - Register for an interview with a company
 - `PUT /api/v1/registrations/:id` - Update an existing registration
