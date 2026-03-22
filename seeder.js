@@ -160,16 +160,16 @@ const usersData = [
     password: "password123",
   },
   {
-    name: "Somchai User",
-    tel: "0812345678", // Valid: Starts with 08
-    email: "somchai@example.com",
+    name: "James User",
+    tel: "0812345678",
+    email: "james@example.com",
     role: "user",
     password: "password123",
   },
   {
-    name: "Suda User",
-    tel: "0987654321", // Valid: Starts with 09
-    email: "suda@example.com",
+    name: "Pluem User",
+    tel: "0987654321",
+    email: "pluem@example.com",
     role: "user",
     password: "password123",
   },
@@ -198,17 +198,17 @@ const importData = async () => {
     // Dates must be between 2022-05-10 and 2022-05-13
     const registrationsData = [
       {
-        user: insertedUsers[1]._id, // Links to Somchai
+        user: insertedUsers[1]._id, // Links to James
         company: insertedCompanies[0]._id, // Links to Sigma Logistics
         apptDate: new Date("2022-05-10T09:00:00Z"), // Valid: May 10, 2022
       },
       {
-        user: insertedUsers[2]._id, // Links to Suda
+        user: insertedUsers[2]._id, // Links to Pluem
         company: insertedCompanies[1]._id, // Links to Apex Tech Solutions
         apptDate: new Date("2022-05-12T14:30:00Z"), // Valid: May 12, 2022
       },
       {
-        user: insertedUsers[1]._id, // Somchai again
+        user: insertedUsers[1]._id, // James again
         company: insertedCompanies[15]._id, // Links to Urban Build
         apptDate: new Date("2022-05-13T10:00:00Z"), // Valid: May 13, 2022
       },
