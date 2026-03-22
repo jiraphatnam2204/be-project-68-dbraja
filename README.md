@@ -1,6 +1,6 @@
 # Online Job Fair Registration API
 
-[![Vercel Deployment](https://img.shields.io/badge/Vercel-Deployment-blue?logo=vercel)](https://be-project-68-dbraja.vercel.app)
+[![Railway Deployment](https://img.shields.io/badge/Railway-Deployment-blue?logo=railway)](https://be-project-68-dbraja-production.up.railway.app)
 [![Node.js](https://img.shields.io/badge/Node.js-v14+-green?logo=node.js)](https://nodejs.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green?logo=mongodb)](https://www.mongodb.com/cloud/atlas)
 
