@@ -1,264 +1,462 @@
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 
-dotenv.config({ path: './config/config.env' });
+dotenv.config({ path: "./config/config.env" });
 
-const Company = require('./models/Company');
-const User = require('./models/User');
-const Registration = require('./models/Registration');
+const Company = require("./models/Company");
+const User = require("./models/User");
+const Registration = require("./models/Registration");
 
 const companies = [
-    {
-        name: 'Tech Innovations Co.',
-        address: '123 Silicon Valley Rd, San Francisco, CA 94105',
-        website: 'https://techinnovations.com',
-        description: 'A leading technology company specializing in AI and machine learning solutions for enterprise clients.',
-        tel: '0812345678'
-    },
-    {
-        name: 'Green Energy Solutions',
-        address: '456 Eco Park Ave, Austin, TX 78701',
-        website: 'https://greenenergysolutions.com',
-        description: 'Providing sustainable energy solutions including solar panels and wind turbines for residential and commercial use.',
-        tel: '0823456789'
-    },
-    {
-        name: 'HealthBridge Medical',
-        address: '789 Medical Center Dr, Boston, MA 02115',
-        website: 'https://healthbridgemedical.com',
-        description: 'A healthcare technology firm developing innovative digital health platforms and telemedicine services.',
-        tel: '0834567890'
-    },
-    {
-        name: 'FinTech Capital Group',
-        address: '101 Wall Street, New York, NY 10005',
-        website: 'https://fintechcapital.com',
-        description: 'Financial technology company offering cutting-edge payment processing, digital banking, and investment platforms.',
-        tel: '0845678901'
-    },
-    {
-        name: 'LogiFlow Logistics',
-        address: '202 Warehouse Blvd, Chicago, IL 60601',
-        website: 'https://logiflow.com',
-        description: 'End-to-end supply chain and logistics management company serving clients across Southeast Asia and beyond.',
-        tel: '0856789012'
-    },
-    {
-        name: 'EduTech Academy',
-        address: '303 Learning Lane, Seattle, WA 98101',
-        website: 'https://edutechacademy.com',
-        description: 'Online education platform offering professional development courses, coding bootcamps, and university partnerships.',
-        tel: '0867890123'
-    },
-    {
-        name: 'CloudSphere Systems',
-        address: '404 Cloud Computing Way, Denver, CO 80201',
-        website: 'https://cloudspheresystems.com',
-        description: 'Enterprise cloud infrastructure provider delivering scalable hosting, DevOps, and cybersecurity services.',
-        tel: '0878901234'
-    },
-    {
-        name: 'Retail Nexus Group',
-        address: '505 Shopping Center Rd, Miami, FL 33101',
-        website: 'https://retailnexus.com',
-        description: 'E-commerce and retail technology company building omnichannel solutions for modern retail businesses.',
-        tel: '0889012345'
-    },
-    {
-        name: 'AutoDrive Technologies',
-        address: '606 Motor City Ave, Detroit, MI 48201',
-        website: 'https://autodrivetechnologies.com',
-        description: 'Autonomous vehicle software company developing advanced driver assistance systems and self-driving car platforms.',
-        tel: '0890123456'
-    },
-    {
-        name: 'BioGen Research Labs',
-        address: '707 Science Park Dr, San Diego, CA 92121',
-        website: 'https://biogenresearchlabs.com',
-        description: 'Biotechnology research company focused on genomics, drug discovery, and personalized medicine solutions.',
-        tel: '0801234567'
-    },
-    { name: 'SkyHigh Aerospace', address: '111 Pilot Way, Seattle, WA', website: 'https://skyhigh.com', description: 'Advanced aerospace engineering.', tel: '0811223344' },
-    { name: 'Oceanic Research', address: '222 Marine Dr, Miami, FL', website: 'https://oceanic.com', description: 'Marine biology and ocean conservation.', tel: '0822334455' },
-    { name: 'CyberGuard Security', address: '333 Firewall St, San Jose, CA', website: 'https://cyberguard.com', description: 'Next-gen cybersecurity solutions.', tel: '0833445566' },
-    { name: 'Urban Design Studio', address: '444 City Plaza, New York, NY', website: 'https://urbandesign.com', description: 'Sustainable urban planning.', tel: '0844556677' },
-    { name: 'Quantum Computing Inc', address: '555 Qubit Blvd, Cambridge, MA', website: 'https://quantum.com', description: 'Quantum hardware and software development.', tel: '0855667788' },
-    { name: 'AgriTech Solutions', address: '666 Harvest Rd, Des Moines, IA', website: 'https://agritech.com', description: 'Smart farming and agricultural technology.', tel: '0866778899' },
-    { name: 'Solaris Energy', address: '777 Sunshine Ave, Phoenix, AZ', website: 'https://solaris.com', description: 'Renewable solar energy systems.', tel: '0877889900' },
-    { name: 'NanoMed Systems', address: '888 Micro Way, Houston, TX', website: 'https://nanomed.com', description: 'Nanotechnology for medical applications.', tel: '0888990011' },
-    { name: 'Global Logistics Hub', address: '999 Port Rd, Long Beach, CA', website: 'https://globallogistics.com', description: 'International shipping and warehousing.', tel: '0899001122' },
-    { name: 'Infinite Media', address: '123 Creator Lane, Los Angeles, CA', website: 'https://infinitemedia.com', description: 'Digital content creation and marketing.', tel: '0812121212' },
-    { name: 'BioFuel Dynamics', address: '234 Bio Dr, Portland, OR', website: 'https://biofuel.com', description: 'Developing eco-friendly biofuels.', tel: '0823232323' },
-    { name: 'Swift Payments', address: '345 Transaction Ave, Charlotte, NC', website: 'https://swiftpayments.com', description: 'Fast and secure payment processing.', tel: '0834343434' },
-    { name: 'DeepBlue AI', address: '456 Neural Way, Pittsburgh, PA', website: 'https://deepblue.com', description: 'Artificial intelligence for deep learning.', tel: '0845454545' },
-    { name: 'Apex Robotics', address: '567 Automation St, Columbus, OH', website: 'https://apexrobotics.com', description: 'Industrial and consumer robotics.', tel: '0856565656' },
-    { name: 'Peak Performance', address: '678 Fitness Rd, Boulder, CO', website: 'https://peakperformance.com', description: 'Sports science and athletic equipment.', tel: '0867676767' },
-    { name: 'SilverLine Trains', address: '789 Transit Blvd, Chicago, IL', website: 'https://silverline.com', description: 'Modern rail transport solutions.', tel: '0878787878' },
-    { name: 'GigaData Analytics', address: '890 Insight Dr, Atlanta, GA', website: 'https://gigadata.com', description: 'Big data analysis and visualization.', tel: '0889898989' },
-    { name: 'Verdant Landscapes', address: '901 Garden St, Portland, OR', website: 'https://verdant.com', description: 'Eco-friendly landscaping services.', tel: '0890909090' },
-    { name: 'SafeTravel Insurance', address: '012 Protection Ave, Hartford, CT', website: 'https://safetravel.com', description: 'Global travel insurance plans.', tel: '0801010101' },
-    { name: 'Modern Living', address: '123 Style Rd, Dallas, TX', website: 'https://modernliving.com', description: 'Contemporary furniture and interior design.', tel: '0813131313' },
-    { name: 'AquaPure Systems', address: '234 Clear Water Dr, Las Vegas, NV', website: 'https://aquapure.com', description: 'Water purification and filtration.', tel: '0824242424' },
-    { name: 'Z-Tech Electronics', address: '345 Circuit St, Austin, TX', website: 'https://ztech.com', description: 'Consumer electronics manufacturing.', tel: '0835353535' },
-    { name: 'Starlight Hotels', address: '456 Luxury Blvd, Orlando, FL', website: 'https://starlight.com', description: 'Premium hospitality and hotels.', tel: '0846464646' },
-    { name: 'Rapid Delivery', address: '567 Courier Way, Memphis, TN', website: 'https://rapid.com', description: 'Same-day delivery services.', tel: '0857575757' },
-    { name: 'EcoSmart Homes', address: '678 Green Dr, Salt Lake City, UT', website: 'https://ecosmart.com', description: 'Smart home automation for energy efficiency.', tel: '0868686868' },
-    { name: 'BlueSky Airlines', address: '789 Terminal Rd, Atlanta, GA', website: 'https://bluesky.com', description: 'Regional and international air travel.', tel: '0879797979' },
-    { name: 'Visionary Optics', address: '890 Lens Ave, Rochester, NY', website: 'https://visionary.com', description: 'Advanced eyewear and optical systems.', tel: '0880808080' },
-    { name: 'TrueNorth Finance', address: '901 Capital St, Minneapolis, MN', website: 'https://truenorth.com', description: 'Wealth management and financial planning.', tel: '0891919191' },
-    { name: 'IronClad Construction', address: '012 Steel Rd, Pittsburgh, PA', website: 'https://ironclad.com', description: 'Heavy construction and infrastructure.', tel: '0802020202' },
-    { name: 'PetCare Plus', address: '123 Paws Ave, Nashville, TN', website: 'https://petcare.com', description: 'Full-service veterinary and pet care.', tel: '0814141414' },
-    { name: 'NextStep Careers', address: '234 Future St, Richmond, VA', website: 'https://nextstep.com', description: 'Job placement and career coaching.', tel: '0825252525' },
-    { name: 'BrightMind Education', address: '345 Wisdom Way, Madison, WI', website: 'https://brightmind.com', description: 'K-12 educational resources and tutoring.', tel: '0836363636' },
-    { name: 'ClearView Real Estate', address: '456 Property Rd, Seattle, WA', website: 'https://clearview.com', description: 'Residential and commercial real estate.', tel: '0847474747' },
-    { name: 'Delta Software', address: '567 Code Blvd, San Francisco, CA', website: 'https://delta.com', description: 'Custom software development services.', tel: '0858585858' },
-    { name: 'Epsilon Pharma', address: '678 Lab Rd, Raleigh, NC', website: 'https://epsilon.com', description: 'Pharmaceutical research and development.', tel: '0869696969' },
-    { name: 'Zeta Fashion', address: '789 Runway Ave, New York, NY', website: 'https://zeta.com', description: 'High-end fashion and apparel.', tel: '0870707070' },
-    { name: 'Alpha Auto', address: '890 Engine St, Detroit, MI', website: 'https://alphaauto.com', description: 'Automobile parts and manufacturing.', tel: '0881818181' },
-    { name: 'Gamma Gaming', address: '901 Joystick Rd, Irvine, CA', website: 'https://gamma.com', description: 'Video game development and publishing.', tel: '0892929292' },
-    { name: 'Theta Wellness', address: '012 Zen Way, Sedona, AZ', website: 'https://theta.com', description: 'Holistic health and wellness retreats.', tel: '0803030303' },
-    { name: 'Sigma Logistics', address: '123 Freight Dr, Louisville, KY', website: 'https://sigma.com', description: 'Supply chain management and trucking.', tel: '0815151515' }
+  {
+    name: "Sigma Logistics",
+    address: "123 Freight Dr, Louisville, KY",
+    website: "https://sigma.com",
+    description: "Supply chain management and trucking.",
+    tel: "0815151515",
+  },
+  {
+    name: "Apex Tech Solutions",
+    address: "456 Innovation Way, San Jose, CA",
+    website: "https://apextech.com",
+    description: "Enterprise software development and cloud infrastructure.",
+    tel: "0825551234",
+  },
+  {
+    name: "Meridian Health",
+    address: "789 Wellness Blvd, Boston, MA",
+    website: "https://meridianhealth.com",
+    description: "Medical equipment manufacturing and distribution.",
+    tel: "0831112222",
+  },
+  {
+    name: "Nova Dynamics",
+    address: "101 Aerospace Pkwy, Houston, TX",
+    website: "https://novadynamics.com",
+    description: "Aerospace engineering and satellite components.",
+    tel: "0842223333",
+  },
+  {
+    name: "GreenLeaf Organics",
+    address: "202 Farm Rd, Portland, OR",
+    website: "https://greenleaforganics.com",
+    description: "Organic food processing and wholesale.",
+    tel: "0853334444",
+  },
+  {
+    name: "Pinnacle Finance",
+    address: "303 Wall St, New York, NY",
+    website: "https://pinnaclefinance.com",
+    description: "Investment banking and asset management.",
+    tel: "0864445555",
+  },
+  {
+    name: "Quantum Computing Co",
+    address: "404 Qubit Ln, Seattle, WA",
+    website: "https://quantumco.com",
+    description: "Next-generation computing hardware research.",
+    tel: "0875556666",
+  },
+  {
+    name: "BlueWave Marine",
+    address: "505 Ocean Ave, Miami, FL",
+    website: "https://bluewave.com",
+    description: "Commercial shipping and maritime logistics.",
+    tel: "0886667777",
+  },
+  {
+    name: "Summit Real Estate",
+    address: "606 Skyline Dr, Denver, CO",
+    website: "https://summitre.com",
+    description: "Commercial property management and development.",
+    tel: "0897778888",
+  },
+  {
+    name: "Echo Communications",
+    address: "707 Signal Way, Atlanta, GA",
+    website: "https://echocomm.com",
+    description: "Telecommunications and networking equipment.",
+    tel: "0818889999",
+  },
+  {
+    name: "IronClad Security",
+    address: "808 Shield Ct, Washington, DC",
+    website: "https://ironclad.com",
+    description: "Cybersecurity consulting and threat intelligence.",
+    tel: "0829990000",
+  },
+  {
+    name: "Solaris Energy",
+    address: "909 Sunbeam St, Phoenix, AZ",
+    website: "https://solarisenergy.com",
+    description: "Solar panel manufacturing and installation.",
+    tel: "0830001111",
+  },
+  {
+    name: "Velocity Motors",
+    address: "111 Engine Blvd, Detroit, MI",
+    website: "https://velocitymotors.com",
+    description: "Automotive parts manufacturing.",
+    tel: "0841112222",
+  },
+  {
+    name: "Luminous Media",
+    address: "222 Creative Ave, Los Angeles, CA",
+    website: "https://luminousmedia.com",
+    description: "Digital marketing and video production.",
+    tel: "0852223333",
+  },
+  {
+    name: "Horizon BioTech",
+    address: "333 DNA Dr, Cambridge, MA",
+    website: "https://horizonbio.com",
+    description: "Pharmaceutical research and development.",
+    tel: "0863334444",
+  },
+  {
+    name: "Urban Build",
+    address: "444 Constructor Rd, Chicago, IL",
+    website: "https://urbanbuild.com",
+    description: "Large-scale construction and civil engineering.",
+    tel: "0874445555",
+  },
+  {
+    name: "AeroStream",
+    address: "555 Jet Pkwy, Dallas, TX",
+    website: "https://aerostream.com",
+    description: "Aviation services and charter flights.",
+    tel: "0885556666",
+  },
+  {
+    name: "TerraFirma Ag",
+    address: "666 Harvest Ln, Omaha, NE",
+    website: "https://terrafirma.com",
+    description: "Agricultural technology and smart farming solutions.",
+    tel: "0896667777",
+  },
+  {
+    name: "CodeCraft",
+    address: "777 Dev Ave, Austin, TX",
+    website: "https://codecraft.com",
+    description: "Web development bootcamps and IT training.",
+    tel: "0817778888",
+  },
+  {
+    name: "Crystal Clear Water",
+    address: "888 Aqua St, Tampa, FL",
+    website: "https://crystalclear.com",
+    description: "Water purification systems and bottling.",
+    tel: "0828889999",
+  },
+  {
+    name: "Onyx Retail",
+    address: "999 Shopper Blvd, Minneapolis, MN",
+    website: "https://onyxretail.com",
+    description: "E-commerce platform and retail analytics.",
+    tel: "0839990000",
+  },
+  {
+    name: "Vanguard Materials",
+    address: "121 Alloy Way, Pittsburgh, PA",
+    website: "https://vanguardmat.com",
+    description: "Advanced composites and metallurgy.",
+    tel: "0840001111",
+  },
+  {
+    name: "Neon Graphics",
+    address: "232 Pixel Ln, San Francisco, CA",
+    website: "https://neongraphics.com",
+    description: "3D rendering software and game engines.",
+    tel: "0851112222",
+  },
+  {
+    name: "Starlight Apparel",
+    address: "343 Fashion Ave, New York, NY",
+    website: "https://starlight.com",
+    description: "Clothing design and textile manufacturing.",
+    tel: "0862223333",
+  },
+  {
+    name: "Titan Heavy Industries",
+    address: "454 Steel Rd, Cleveland, OH",
+    website: "https://titanheavy.com",
+    description: "Industrial machinery and heavy equipment.",
+    tel: "0873334444",
+  },
+  {
+    name: "Omega Robotics",
+    address: "565 Cyber Dr, San Diego, CA",
+    website: "https://omegarobotics.com",
+    description: "Automated assembly line robots.",
+    tel: "0884445555",
+  },
+  {
+    name: "Zenith Architecture",
+    address: "676 Blueprint Blvd, Portland, OR",
+    website: "https://zenitharch.com",
+    description: "Sustainable building design and consulting.",
+    tel: "0895556666",
+  },
+  {
+    name: "Pulse Fitness",
+    address: "787 Cardio Ct, Denver, CO",
+    website: "https://pulsefitness.com",
+    description: "Smart home gym equipment.",
+    tel: "0816667777",
+  },
+  {
+    name: "Cascade Beverages",
+    address: "898 Spring Rd, Seattle, WA",
+    website: "https://cascadebev.com",
+    description: "Craft soda and sparkling water distributor.",
+    tel: "0827778888",
+  },
+  {
+    name: "Aurora AI",
+    address: "909 Neural Net Way, Toronto, ON",
+    website: "https://auroraai.com",
+    description: "Machine learning models for predictive analytics.",
+    tel: "0838889999",
+  },
+  {
+    name: "Cobalt Mining",
+    address: "131 Mineral St, Salt Lake City, UT",
+    website: "https://cobaltmining.com",
+    description: "Rare earth mineral extraction and refining.",
+    tel: "0849990000",
+  },
+  {
+    name: "Silverline Transit",
+    address: "242 Metro Blvd, Charlotte, NC",
+    website: "https://silverline.com",
+    description: "Public transportation logistics and software.",
+    tel: "0850001111",
+  },
+  {
+    name: "Ignite Marketing",
+    address: "353 Ad Ave, Austin, TX",
+    website: "https://ignitemarketing.com",
+    description: "SEO and digital ad campaign management.",
+    tel: "0861112222",
+  },
+  {
+    name: "Fortress Storage",
+    address: "464 Archive Dr, Reno, NV",
+    website: "https://fortress.com",
+    description: "Secure data centers and cloud storage.",
+    tel: "0872223333",
+  },
+  {
+    name: "Prism Print",
+    address: "575 CMYK Rd, Milwaukee, WI",
+    website: "https://prismprint.com",
+    description: "Commercial printing and packaging solutions.",
+    tel: "0883334444",
+  },
+  {
+    name: "Aether Networks",
+    address: "686 Router Ln, Raleigh, NC",
+    website: "https://aethernet.com",
+    description: "ISP and fiber optic installations.",
+    tel: "0894445555",
+  },
+  {
+    name: "Haven Homes",
+    address: "797 Suburbia St, Orlando, FL",
+    website: "https://havenhomes.com",
+    description: "Residential home construction.",
+    tel: "0815556666",
+  },
+  {
+    name: "Vertex Gaming",
+    address: "808 Controller Ct, Montreal, QC",
+    website: "https://vertexgaming.com",
+    description: "Video game development and publishing.",
+    tel: "0826667777",
+  },
+  {
+    name: "GigaByte Electronics",
+    address: "919 Circuit Way, Taipei, TW",
+    website: "https://gigabyteel.com",
+    description: "Motherboards and consumer electronics.",
+    tel: "0837778888",
+  },
+  {
+    name: "Maplewood Furniture",
+    address: "141 Timber Rd, Vancouver, BC",
+    website: "https://maplewood.com",
+    description: "Custom woodworking and office furniture.",
+    tel: "0848889999",
+  },
+  {
+    name: "Nimbus Weather",
+    address: "252 Cloud Pkwy, Boulder, CO",
+    website: "https://nimbusweather.com",
+    description: "Meteorological data APIs and software.",
+    tel: "0859990000",
+  },
+  {
+    name: "Pioneer Petrol",
+    address: "363 Derrick Dr, Tulsa, OK",
+    website: "https://pioneerpetrol.com",
+    description: "Oil refining and pipeline monitoring.",
+    tel: "0860001111",
+  },
+  {
+    name: "Acme Supplies",
+    address: "474 Generic Ave, St. Louis, MO",
+    website: "https://acmesupplies.com",
+    description: "Wholesale office supplies and stationery.",
+    tel: "0871112222",
+  },
+  {
+    name: "Borealis Travel",
+    address: "585 Passport Blvd, Miami, FL",
+    website: "https://borealistravel.com",
+    description: "Corporate travel booking and management.",
+    tel: "0882223333",
+  },
+  {
+    name: "Crimson Education",
+    address: "696 Campus Way, Boston, MA",
+    website: "https://crimsonedu.com",
+    description: "E-learning platforms and virtual classrooms.",
+    tel: "0893334444",
+  },
+  {
+    name: "Delta Hydraulics",
+    address: "707 Valve St, Indianapolis, IN",
+    website: "https://deltahydraulics.com",
+    description: "Fluid power systems for industrial use.",
+    tel: "0814445555",
+  },
+  {
+    name: "Equinox Solar",
+    address: "818 Photon Dr, Las Vegas, NV",
+    website: "https://equinoxsolar.com",
+    description: "Utility-scale solar farm development.",
+    tel: "0825556666",
+  },
+  {
+    name: "Frontier Space",
+    address: "929 Orbit Ln, Cape Canaveral, FL",
+    website: "https://frontierspace.com",
+    description: "Commercial spaceflight payload integration.",
+    tel: "0836667777",
+  },
+  {
+    name: "Genesis Bio",
+    address: "151 Cell St, San Francisco, CA",
+    website: "https://genesisbio.com",
+    description: "Synthetic biology and genetic sequencing.",
+    tel: "0847778888",
+  },
+  {
+    name: "Helios Transport",
+    address: "262 Transit Pkwy, Chicago, IL",
+    website: "https://heliostransport.com",
+    description: "Electric bus manufacturing and sales.",
+    tel: "0858889999",
+  },
 ];
 
 // tel must match /^0[689]{1}\d{8}$/  (06x, 08x, 09x followed by 8 digits)
 const usersData = [
-    {
-        name: 'Admin User',
-        tel: '0611111111',
-        email: 'admin@dbraja.com',
-        role: 'admin',
-        password: 'password123'
-    },
-    // {
-    //     name: 'Alice Johnson',
-    //     tel: '0622222222',
-    //     email: 'alice.johnson@example.com',
-    //     role: 'user',
-    //     password: 'password123'
-    // },
-    // {
-    //     name: 'Bob Smith',
-    //     tel: '0633333333',
-    //     email: 'bob.smith@example.com',
-    //     role: 'user',
-    //     password: 'password123'
-    // },
-    // {
-    //     name: 'Carol White',
-    //     tel: '0644444444',
-    //     email: 'carol.white@example.com',
-    //     role: 'user',
-    //     password: 'password123'
-    // },
-    // {
-    //     name: 'David Brown',
-    //     tel: '0655555555',
-    //     email: 'david.brown@example.com',
-    //     role: 'user',
-    //     password: 'password123'
-    // },
-    // {
-    //     name: 'Eva Martinez',
-    //     tel: '0666666666',
-    //     email: 'eva.martinez@example.com',
-    //     role: 'user',
-    //     password: 'password123'
-    // },
-    // {
-    //     name: 'Frank Lee',
-    //     tel: '0677777777',
-    //     email: 'frank.lee@example.com',
-    //     role: 'user',
-    //     password: 'password123'
-    // },
-    // {
-    //     name: 'Grace Kim',
-    //     tel: '0688888888',
-    //     email: 'grace.kim@example.com',
-    //     role: 'user',
-    //     password: 'password123'
-    // },
-    // {
-    //     name: 'Henry Chen',
-    //     tel: '0699999999',
-    //     email: 'henry.chen@example.com',
-    //     role: 'user',
-    //     password: 'password123'
-    // },
-    // {
-    //     name: 'Iris Nguyen',
-    //     tel: '0610101010',
-    //     email: 'iris.nguyen@example.com',
-    //     role: 'user',
-    //     password: 'password123'
-    // }
+  {
+    name: "Admin User",
+    tel: "0611111111",
+    email: "admin@dbraja.com",
+    role: "admin",
+    password: "password123", // Note: Your console log says password123, you might want to make them match!
+  },
+  {
+    name: "Somchai User",
+    tel: "0812345678", // Valid: Starts with 08
+    email: "somchai@example.com",
+    role: "user",
+    password: "password123",
+  },
+  {
+    name: "Suda User",
+    tel: "0987654321", // Valid: Starts with 09
+    email: "suda@example.com",
+    role: "user",
+    password: "password123",
+  },
 ];
 
 const importData = async () => {
-    try {
-        await mongoose.connect(process.env.MONGO_URI);
-        console.log('MongoDB Connected');
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("MongoDB Connected");
 
-        // Clear all collections
-        await Registration.deleteMany();
-        await User.deleteMany();
-        await Company.deleteMany();
-        console.log('All collections cleared');
+    // Clear all collections
+    await Registration.deleteMany();
+    await User.deleteMany();
+    await Company.deleteMany();
+    console.log("All collections cleared");
 
-        // Insert companies
-        const insertedCompanies = await Company.insertMany(companies);
-        console.log(`${insertedCompanies.length} companies inserted`);
+    // Insert companies
+    const insertedCompanies = await Company.insertMany(companies);
+    console.log(`${insertedCompanies.length} companies inserted`);
 
-        // Insert users via create() to trigger the bcrypt pre-save hook
-        const insertedUsers = await User.create(usersData);
-        console.log(`${insertedUsers.length} users inserted`);
+    // Insert users via create() to trigger the bcrypt pre-save hook
+    const insertedUsers = await User.create(usersData);
+    console.log(`${insertedUsers.length} users inserted`);
 
-        // Build registrations using real IDs
-        // Dates must be between 2022-05-10 and 2022-05-13
-        const registrations = [
-            // { apptDate: new Date('2022-05-10'), user: insertedUsers[1]._id, company: insertedCompanies[0]._id },
-            // { apptDate: new Date('2022-05-10'), user: insertedUsers[2]._id, company: insertedCompanies[1]._id },
-            // { apptDate: new Date('2022-05-11'), user: insertedUsers[3]._id, company: insertedCompanies[2]._id },
-            // { apptDate: new Date('2022-05-11'), user: insertedUsers[4]._id, company: insertedCompanies[3]._id },
-            // { apptDate: new Date('2022-05-11'), user: insertedUsers[5]._id, company: insertedCompanies[4]._id },
-            // { apptDate: new Date('2022-05-12'), user: insertedUsers[6]._id, company: insertedCompanies[5]._id },
-            // { apptDate: new Date('2022-05-12'), user: insertedUsers[7]._id, company: insertedCompanies[6]._id },
-            // { apptDate: new Date('2022-05-12'), user: insertedUsers[8]._id, company: insertedCompanies[7]._id },
-            // { apptDate: new Date('2022-05-13'), user: insertedUsers[9]._id, company: insertedCompanies[8]._id },
-            // { apptDate: new Date('2022-05-13'), user: insertedUsers[1]._id, company: insertedCompanies[9]._id },
-        ];
+    // Build registrations using real IDs
+    // Dates must be between 2022-05-10 and 2022-05-13
+    const registrationsData = [
+      {
+        user: insertedUsers[1]._id, // Links to Somchai
+        company: insertedCompanies[0]._id, // Links to Sigma Logistics
+        apptDate: new Date("2022-05-10T09:00:00Z"), // Valid: May 10, 2022
+      },
+      {
+        user: insertedUsers[2]._id, // Links to Suda
+        company: insertedCompanies[1]._id, // Links to Apex Tech Solutions
+        apptDate: new Date("2022-05-12T14:30:00Z"), // Valid: May 12, 2022
+      },
+      {
+        user: insertedUsers[1]._id, // Somchai again
+        company: insertedCompanies[15]._id, // Links to Urban Build
+        apptDate: new Date("2022-05-13T10:00:00Z"), // Valid: May 13, 2022
+      },
+    ];
 
-        const insertedRegistrations = await Registration.insertMany(registrations);
-        console.log(`${insertedRegistrations.length} registrations inserted`);
+    const insertedRegistrations = await Registration.insertMany(registrationsData);
+    console.log(`${insertedRegistrations.length} registrations inserted`);
 
-        console.log('\nSeed complete!');
-        console.log('Admin credentials -> email: admin@dbraja.com | password: password123');
-        process.exit(0);
-    } catch (err) {
-        console.error(err);
-        process.exit(1);
-    }
+    console.log("\nSeed complete!");
+    console.log(
+      "Admin credentials -> email: admin@dbraja.com | password: password123",
+    );
+    process.exit(0);
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
 };
 
 const deleteData = async () => {
-    try {
-        await mongoose.connect(process.env.MONGO_URI);
-        console.log('MongoDB Connected');
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("MongoDB Connected");
 
-        await Registration.deleteMany();
-        await User.deleteMany();
-        await Company.deleteMany();
-        console.log('All data deleted');
+    await Registration.deleteMany();
+    await User.deleteMany();
+    await Company.deleteMany();
+    console.log("All data deleted");
 
-        process.exit(0);
-    } catch (err) {
-        console.error(err);
-        process.exit(1);
-    }
+    process.exit(0);
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
 };
 
-if (process.argv[2] === '-d') {
-    deleteData();
+if (process.argv[2] === "-d") {
+  deleteData();
 } else {
-    importData();
+  importData();
 }
