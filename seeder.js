@@ -367,7 +367,7 @@ const usersData = [
     tel: "0611111111",
     email: "admin@dbraja.com",
     role: "admin",
-    password: "password123", // Note: Your console log says password123, you might want to make them match!
+    password: "password123",
   },
   {
     name: "Somchai User",
@@ -424,7 +424,8 @@ const importData = async () => {
       },
     ];
 
-    const insertedRegistrations = await Registration.insertMany(registrationsData);
+    const insertedRegistrations =
+      await Registration.insertMany(registrationsData);
     console.log(`${insertedRegistrations.length} registrations inserted`);
 
     console.log("\nSeed complete!");
