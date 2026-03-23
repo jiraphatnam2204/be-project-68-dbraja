@@ -11,7 +11,7 @@ exports.getRegistrations = async (req, res, next) => {
       })
       .populate({
         path: "user",
-        select: "name tel",
+        select: "name tel role",
       });
   } else {
     if (req.params.companyId) {
@@ -22,7 +22,7 @@ exports.getRegistrations = async (req, res, next) => {
         })
         .populate({
           path: "user",
-          select: "name tel",
+          select: "name tel role",
         });
     } else {
       query = Registration.find()
@@ -32,7 +32,7 @@ exports.getRegistrations = async (req, res, next) => {
         })
         .populate({
           path: "user",
-          select: "name tel",
+          select: "name tel role",
         });
     }
   }
@@ -61,7 +61,7 @@ exports.getRegistration = async (req, res, next) => {
       })
       .populate({
         path: "user",
-        select: "name tel",
+        select: "name tel role",
       });
     if (!registration) {
       return res.status(404).json({
