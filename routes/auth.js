@@ -149,3 +149,4 @@ router.get('/me', protect, getMe);
 router.get('/logout', protect, logout);
 
 module.exports = router;
+
