@@ -12,7 +12,12 @@ const router = express.Router();
 
 const { protect, authorize } = require('../middleware/auth');
 
-router.route('/stats').get(protect, authorize('admin'), getRegistrationStats);
+/**
+ * @swagger
+ * tags:
+ *   name: Registrations
+ *   description: Registration management API
+ */
 
 /**
  * @swagger
@@ -26,6 +31,7 @@ router.route('/stats').get(protect, authorize('admin'), getRegistrationStats);
  *       properties:
  *         id:
  *           type: string
+ *           description: Auto-generated MongoDB ObjectId
  *         apptDate:
  *           type: string
  *           format: date-time
@@ -39,7 +45,48 @@ router.route('/stats').get(protect, authorize('admin'), getRegistrationStats);
  *         createdAt:
  *           type: string
  *           format: date-time
+ *     RegistrationStats:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *         totalRegistrations:
+ *           type: integer
+ *         companyStats:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               companyName:
+ *                 type: string
+ *               numRegistrations:
+ *                 type: integer
  */
+
+/**
+ * @swagger
+ * /registrations/stats:
+ *   get:
+ *     summary: Get registration statistics
+ *     description: Get total count of registrations and breakdown by company. Admin only.
+ *     tags: [Registrations]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved registration statistics
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/RegistrationStats'
+ *       401:
+ *         description: Not authorized
+ *       403:
+ *         description: Forbidden - admin only
+ *       500:
+ *         description: Server error
+ */
+router.route('/stats').get(protect, authorize('admin'), getRegistrationStats);
 
 /**
  * @swagger
@@ -85,8 +132,10 @@ router.route('/stats').get(protect, authorize('admin'), getRegistrationStats);
  *               apptDate:
  *                 type: string
  *                 format: date-time
+ *                 description: Interview date (May 10-13, 2022)
  *               company:
  *                 type: string
+ *                 description: ID of the company to register with
  *     responses:
  *       201:
  *         description: Registration created successfully

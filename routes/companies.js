@@ -13,6 +13,13 @@ const { protect, authorize } = require('../middleware/auth');
 
 /**
  * @swagger
+ * tags:
+ *   name: Companies
+ *   description: Company management API
+ */
+
+/**
+ * @swagger
  * components:
  *   schemas:
  *     Company:
@@ -29,15 +36,20 @@ const { protect, authorize } = require('../middleware/auth');
  *         name:
  *           type: string
  *           maxLength: 50
+ *           description: Name of the company
  *         address:
  *           type: string
+ *           description: Physical address of the company
  *         website:
  *           type: string
+ *           description: Official website URL
  *         description:
  *           type: string
  *           maxLength: 500
+ *           description: Brief description of the company
  *         tel:
  *           type: string
+ *           description: Contact telephone number
  */
 
 /**
@@ -46,6 +58,29 @@ const { protect, authorize } = require('../middleware/auth');
  *   get:
  *     summary: Get all companies
  *     tags: [Companies]
+ *     parameters:
+ *       - in: query
+ *         name: select
+ *         schema:
+ *           type: string
+ *         description: Select fields (comma-separated)
+ *       - in: query
+ *         name: sort
+ *         schema:
+ *           type: string
+ *         description: Sort fields (comma-separated, prefix with - for descending)
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 25
+ *         description: Number of records per page
  *     responses:
  *       200:
  *         description: List of all companies
@@ -58,6 +93,8 @@ const { protect, authorize } = require('../middleware/auth');
  *                   type: boolean
  *                 count:
  *                   type: integer
+ *                 pagination:
+ *                   type: object
  *                 data:
  *                   type: array
  *                   items:

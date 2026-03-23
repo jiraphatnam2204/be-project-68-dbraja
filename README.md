@@ -59,7 +59,6 @@ For a detailed breakdown of system actors and the use case diagram, please refer
    JWT_SECRET=your_complex_secret
    JWT_EXPIRE=30d
    JWT_COOKIE_EXPIRE=30
-   HOST=http://localhost
    ```
 
 4. **Seed Database:**

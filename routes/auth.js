@@ -7,6 +7,13 @@ const { protect } = require('../middleware/auth');
 
 /**
  * @swagger
+ * tags:
+ *   name: Auth
+ *   description: User authentication and management API
+ */
+
+/**
+ * @swagger
  * components:
  *   securitySchemes:
  *     bearerAuth:
@@ -24,16 +31,21 @@ const { protect } = require('../middleware/auth');
  *       properties:
  *         id:
  *           type: string
+ *           description: Auto-generated MongoDB ObjectId
  *         name:
  *           type: string
+ *           description: Full name of the user
  *         tel:
  *           type: string
+ *           description: Telephone number (0XXXXXXXXX)
  *         email:
  *           type: string
+ *           description: Unique email address
  *         role:
  *           type: string
  *           enum: [user, admin]
  *           default: user
+ *           description: User role
  */
 
 /**
