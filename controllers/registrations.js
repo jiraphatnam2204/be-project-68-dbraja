@@ -110,7 +110,8 @@ exports.createRegistration = async (req, res, next) => {
     if (existedRegistrations.length >= 3 && req.user.role !== "admin") {
       return res.status(400).json({
         success: false,
-        message: `The user with ID ${req.user.id} has already made 3 registrations`,
+        // message: `The user with ID ${req.user.id} has already made 3 registrations`,
+        message: `User has already made 3 registrations`,
       });
     }
 
